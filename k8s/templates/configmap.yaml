@@ -3,9 +3,9 @@ kind: ConfigMap
 metadata:
   name: {{ .Chart.Name }}-config
 data:
-  GATLING_BASEURL: {{ .Values.app.appconfig.GATLING_BASEURL }}
-  GATLING_BASEURL_ORDER: {{ .Values.app.appconfig.GATLING_BASEURL_ORDER }}
-  GATLING_BASEURL_MANU: {{ .Values.app.appconfig.GATLING_BASEURL_MANU }}
+  GATLING_BASEURL_SUPPLIERDOMAIN: {{ .Values.app.appconfig.GATLING_BASEURL_SUPPLIERDOMAIN }}
+  GATLING_BASEURL_ORDERDOMAIN: {{ .Values.app.appconfig.GATLING_BASEURL_ORDERDOMAIN }}
+  GATLING_BASEURL_MANUFACTUREDOMAIN: {{ .Values.app.appconfig.GATLING_BASEURL_MANUFACTUREDOMAIN }}
   GATLING_NR_USERS: {{ .Values.app.appconfig.GATLING_NR_USERS | quote }}
   GATLING_MAX_DURATION: {{ .Values.app.appconfig.GATLING_MAX_DURATION | quote }}
   GATLING_RAMPUP_TIME: {{ .Values.app.appconfig.GATLING_RAMPUP_TIME | quote }}

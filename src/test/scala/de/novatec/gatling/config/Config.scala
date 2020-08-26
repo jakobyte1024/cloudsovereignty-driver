@@ -21,7 +21,7 @@ class Configmaster {
 
 object ConfigSupplier extends Configmaster {
   // params
-  val baseUrl: String = sys.env.getOrElse("GATLING_BASEURL","!ERRORinsertValidBaseURL!").toString
+  val baseUrl: String = sys.env.getOrElse("GATLING_BASEURL_SUPPLIERDOMAIN","!ERRORinsertValidBaseURL!").toString
   
   override val httpProtocol: HttpProtocolBuilder = http
     .baseUrl(baseUrl)
@@ -30,7 +30,7 @@ object ConfigSupplier extends Configmaster {
 
 object ConfigOrder extends Configmaster {
   // params
-  val baseUrl: String = sys.env.getOrElse("GATLING_BASEURL_ORDER","!ERRORinsertValidORDER_URL!").toString
+  val baseUrl: String = sys.env.getOrElse("GATLING_BASEURL_ORDERDOMAIN","!ERRORinsertValidORDER_URL!").toString
   
   override val httpProtocol: HttpProtocolBuilder = http
     .baseUrl(baseUrl)
@@ -39,7 +39,7 @@ object ConfigOrder extends Configmaster {
 
 object ConfigManu extends Configmaster{
   // params
-  val baseUrl: String = sys.env.getOrElse("GATLING_BASEURL_MANU","!ERRORinsertValidMANU_URL!").toString
+  val baseUrl: String = sys.env.getOrElse("GATLING_BASEURL_MANUFACTUREDOMAIN","!ERRORinsertValidMANU_URL!").toString
   
   override val httpProtocol: HttpProtocolBuilder = http
     .baseUrl(baseUrl)
