@@ -1,4 +1,4 @@
-FROM maven:3.6-jdk-14 
+FROM maven:3-jdk-8
 LABEL maintainer="Immanuel Haag <immanuel.haag@novatec-gmbh.de>"
 ARG TIME_ZONE=Europe/Berlin
 WORKDIR /build
