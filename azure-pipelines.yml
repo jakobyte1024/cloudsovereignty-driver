@@ -88,7 +88,7 @@ stages:
         chartPath: './k8s/'
         releaseName: 'driver'
         valueFile: './k8s/values.yaml'
-        overrideValues: 'app.image.pullsecret=$(containerregistry-pullsecret),app.image.tag=$(containerimagetagDockerHub),app.image.repository=$(containerregistryDockerHub)/$(containerimagerepository),app.azureconfig.resourcegroup="tc-showcase-prod" '
+        overrideValues: 'app.image.tag=$(containerimagetagDockerHub),app.image.repository=$(containerregistryDockerHub)/$(containerimagerepository),app.azureconfig.resourcegroup="tc-showcase-prod" '
         resetValues: true
         force: false     
         arguments: --debug

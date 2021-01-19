@@ -2,7 +2,6 @@ app:
   image:
     repository: 
     tag:  
-    pullsecret: 
   appconfig:
     GATLING_BASEURL_SUPPLIERDOMAIN: "http://supplierdomain-tc-showcase-prod.trafficmanager.net"
     GATLING_BASEURL_ORDERDOMAIN: "http://orderdomain-tc-showcase-prod.trafficmanager.net"
