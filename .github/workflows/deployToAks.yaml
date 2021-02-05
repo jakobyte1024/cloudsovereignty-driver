@@ -62,9 +62,9 @@ jobs:
                         --namespace ${STAGE} \
                         --install \
                         --values values.yaml \
-                        --set app.appconfig.GATLING_BASEURL_SUPPLIERDOMAIN="${SUPPLIERFQDN}" \
-                        --set app.appconfig.GATLING_BASEURL_ORDERDOMAIN="${ORDERFQDN}" \
-                        --set app.appconfig.GATLING_BASEURL_MANUFACTUREDOMAIN="${MANUFQDN}" \
+                        --set app.appconfig.GATLING_BASEURL_SUPPLIERDOMAIN="http://${SUPPLIERFQDN}" \
+                        --set app.appconfig.GATLING_BASEURL_ORDERDOMAIN="http://${ORDERFQDN}" \
+                        --set app.appconfig.GATLING_BASEURL_MANUFACTUREDOMAIN="http://${MANUFQDN}" \
                         --set app.appconfig.GATLING_NR_USERS="1" \
                         --set app.appconfig.GATLING_MAX_DURATION="1" \
                         --set app.appconfig.GATLING_RAMPUP_TIME="10" \
