@@ -2,7 +2,7 @@ name: Build and push to Dockerhub
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, stable, dev ]
 
 jobs:
   build:
@@ -12,12 +12,38 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-    
+
+    - name: Add SHORT_SHA env property with commit short sha
+      run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
+      
     - name: Build and push Docker images
       uses: docker/build-push-action@v1
       with:
-        username: ${{ secrets.DOCKERHUB_PATCSHOWCASE_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PATCSHOWCASE_PASSWORD }}
+        username: ${{ secrets.TC_SHOWCASE_DOCKERHUB_USER }}
+        password: ${{ secrets.TC_SHOWCASE_DOCKERHUB_PASSWORD }}
         repository: novatec/technologyconsulting-showcase-driver
-        tags: latest
+        tags: latest, ${{ env.SHORT_SHA }} 
         tag_with_sha: true
+
+    - name: Run Trivy vulnerability scanner MEDIUM,HIGH
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: 'novatec/technologyconsulting-showcase-driver:${{ env.SHORT_SHA }}'
+        format: 'template'
+        template: '@/contrib/sarif.tpl'
+        output: 'trivy-results.sarif'
+        exit-code: 0
+        severity: MEDIUM,HIGH
+    
+    - name: Run Trivy vulnerability scanner CRITICAL
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: 'novatec/technologyconsulting-showcase-driver:${{ env.SHORT_SHA }}'
+        format: 'table'
+        exit-code: 1
+        severity: CRITICAL  
+        
+    - name: Upload Trivy scan results to GitHub Security tab
+      uses: github/codeql-action/upload-sarif@v1
+      with:
+        sarif_file: 'trivy-results.sarif'

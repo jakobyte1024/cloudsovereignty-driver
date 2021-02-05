@@ -1,0 +1,89 @@
+name: Deploy to AKS
+
+on:
+  workflow_dispatch:
+
+  workflow_run:
+    workflows: ["Build and push to Dockerhub"]
+    types:
+      - completed    
+      
+jobs:
+  deployToAks:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Get Kubeconfig
+        env:
+          ARM_CLIENT_ID: ${{ secrets.TC_SHOWCASE_ARM_CLIENT_ID }}
+          ARM_CLIENT_SECRET: ${{ secrets.TC_SHOWCASE_ARM_CLIENT_SECRET }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.TC_SHOWCASE_ARM_SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.TC_SHOWCASE_ARM_TENANT_ID }}
+          AKSRESOURCEGROUP: 'tc-showcase-test'
+          AKSNAME: 'k8s-tc-showcase-test'
+        working-directory: ./resources/pipelines/helperscripts
+        run: |
+              ./getKubeconfig.sh
+
+      - name: Get Secrets
+        env:
+          ARM_CLIENT_ID: ${{ secrets.TC_SHOWCASE_ARM_CLIENT_ID }}
+          ARM_CLIENT_SECRET: ${{ secrets.TC_SHOWCASE_ARM_CLIENT_SECRET }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.TC_SHOWCASE_ARM_SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.TC_SHOWCASE_ARM_TENANT_ID }}
+          STAGE: 'stag'
+        working-directory: ./resources/pipelines/helperscripts
+        run: |
+              ./getKeyVaultSecrets.sh
+     
+      - name: Add SHORT_SHA env property with commit short sha
+        run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
+      
+      - name: Deploy via Helm
+        env:
+          ARM_CLIENT_ID: ${{ secrets.TC_SHOWCASE_ARM_CLIENT_ID }}
+          ARM_CLIENT_SECRET: ${{ secrets.TC_SHOWCASE_ARM_CLIENT_SECRET }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.TC_SHOWCASE_ARM_SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.TC_SHOWCASE_ARM_TENANT_ID }}
+          AKSRESOURCEGROUP: 'tc-showcase-test'
+          AKSNAME: 'k8s-tc-showcase-test'
+          STAGE: 'stag'
+          IMAGETAG: ${{ env.SHORT_SHA }}
+        run: |
+              docker run \
+                -v "$(pwd)/resources/k8s":/apps \
+                -v "$(pwd)/resources/pipelines/helperscripts/kubeconfig":/root/.kube \
+                alpine/helm \
+                    upgrade driver ./ \
+                        --namespace ${STAGE} \
+                        --install \
+                        --values values.yaml \
+                        --set app.appconfig.GATLING_BASEURL_SUPPLIERDOMAIN="${SUPPLIERFQDN}" \
+                        --set app.appconfig.GATLING_BASEURL_ORDERDOMAIN="${ORDERFQDN}" \
+                        --set app.appconfig.GATLING_BASEURL_MANUFACTUREDOMAIN="${MANUFQDN}" \
+                        --set app.appconfig.GATLING_NR_USERS="1" \
+                        --set app.appconfig.GATLING_MAX_DURATION="1" \
+                        --set app.appconfig.GATLING_RAMPUP_TIME="10" \
+                        --set app.appconfig.GATLING_NR_USERS_AT_ONCE="1" \
+                        --set app.image.tag="${IMAGETAG}" 
+                       
+
+      - name: Cleanup
+        working-directory: ./resources/pipelines/helperscripts
+        run: |
+              sudo rm -rf kubeconfig
+              echo "DBUSER=asdf" >> $GITHUB_ENV
+              echo "DBPWD=asdf" >> $GITHUB_ENV
+              echo "DBFQDN=asdf" >> $GITHUB_ENV
+              echo "INGRESSFQDN=asdf" >> $GITHUB_ENV
+              echo "DRIVERDOMAINIP=asdf" >> $GITHUB_ENV
+              echo "SUPPLIERFQDN=asdf" >> $GITHUB_ENV
+              echo "ORDERFQDN=asdf" >> $GITHUB_ENV
+              echo "MANUFQDN=asdf" >> $GITHUB_ENV
+
+
+
