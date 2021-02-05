@@ -76,11 +76,6 @@ jobs:
         working-directory: ./resources/pipelines/helperscripts
         run: |
               sudo rm -rf kubeconfig
-              echo "DBUSER=asdf" >> $GITHUB_ENV
-              echo "DBPWD=asdf" >> $GITHUB_ENV
-              echo "DBFQDN=asdf" >> $GITHUB_ENV
-              echo "INGRESSFQDN=asdf" >> $GITHUB_ENV
-              echo "DRIVERDOMAINIP=asdf" >> $GITHUB_ENV
               echo "SUPPLIERFQDN=asdf" >> $GITHUB_ENV
               echo "ORDERFQDN=asdf" >> $GITHUB_ENV
               echo "MANUFQDN=asdf" >> $GITHUB_ENV
