@@ -1,10 +1,20 @@
-### Driver for TC-Showcase
+### Driver for CS-Showcase
 based on: https://github.com/richardhendricksen/gatling-docker-on-aws/tree/v1 
 
 Read more about it in the blog post [here](https://medium.com/@richard.hendricksen/distributed-load-testing-with-gatling-using-docker-and-aws-d497605692db).
 
+## Environment Variables
 
-[![Build Status](https://dev.azure.com/nt-tc-showcase/driver/_apis/build/status/driver?branchName=master)](https://dev.azure.com/nt-tc-showcase/driver/_build/latest?definitionId=9&branchName=master)
+| Environment Variable               | Description                                                  |
+|------------------------------------|--------------------------------------------------------------|
+| GATLING_BASEURL_SUPPLIERDOMAIN     | Base URL for the supplier domain used in Gatling simulations |
+| GATLING_BASEURL_ORDERDOMAIN        | Base URL for the order domain used in Gatling simulations    |
+| GATLING_BASEURL_MANUFACTUREDOMAIN  | Base URL for the manufacture domain used in Gatling simulations |
+| GATLING_NR_USERS                   | Total number of virtual users in the Gatling simulation      |
+| GATLING_MAX_DURATION               | Maximum duration of the Gatling simulation                   |
+| GATLING_RAMPUP_TIME                | Time in seconds to ramp up all virtual users                 |
+| GATLING_NR_USERS_AT_ONCE           | Number of virtual users started immediately at simulation start |
+
 ## Prerequisites  
 Make sure you have docker and docker-compose installed locally. 
 
