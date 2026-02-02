@@ -1,6 +1,6 @@
 app: 
   image:
-    repository: novatec/technologyconsulting-showcase-driver
+    repository: 4096mm/cloudsovereignty-driver
     tag:  
   appconfig:
     GATLING_BASEURL_SUPPLIERDOMAIN: 
